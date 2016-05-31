@@ -5,6 +5,8 @@ var uniqueTouchOutput = document.getElementById('uniqueTouch');
 var totalTouchOutput = document.getElementById('totalTouch');
 var background = document.getElementById('background');
 
+document.getElementById('useTransform').checked = false;
+
 addForceTouchToElement(element);
 
 var uniqueTouchRecorder = new Set();
