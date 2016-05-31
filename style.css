@@ -79,3 +79,8 @@ h1 {
   width: 100%;
   text-align: left;
 }
+
+input[type='checkbox'] {
+    width:30px;
+    height:30px;
+}
