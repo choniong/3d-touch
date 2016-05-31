@@ -1,4 +1,5 @@
 var element = document.getElementById('forceMe');
+var forceMeBar = document.getElementById('forceMeBar');
 var forceValueOutput = document.getElementById('forceValue');
 var uniqueTouchOutput = document.getElementById('uniqueTouch');
 var totalTouchOutput = document.getElementById('totalTouch');
@@ -8,6 +9,8 @@ addForceTouchToElement(element);
 
 var uniqueTouchRecorder = new Set();
 var totalTouchCount = 0;
+
+var shouldUseTransform = false;
 
 function recordTouch(touch) {
   uniqueTouchRecorder.add(touch);
@@ -56,8 +59,12 @@ function refreshForceValue(touch) {
 }
 
 function renderElement(forceValue) {
-  element.style.webkitTransform = 'translateX(-50%) translateY(-50%) scale(' + (1 + forceValue * 1.5) + ')';
-  background.style.webkitFilter = 'blur(' + forceValue * 30 + 'px)';
+  if (shouldUseTransform) {
+    element.style.transform = 'translateX(-50%) translateY(-50%) scale(' + (1 + forceValue * 1.5) + ')';
+    background.style.webkitFilter = 'blur(' + forceValue * 30 + 'px)';
+  } else {
+     forceMeBar.style.width = 200 * forceValue + "px";
+  }
   forceValueOutput.innerHTML = forceValue.toFixed(4);
 }
 
@@ -67,4 +74,8 @@ function addForceTouchToElement(elem) {
   elem.addEventListener('touchend', onTouchEnd, false);
   elem.addEventListener('webkitmouseforcewillbegin', checkMacForce, false);
   elem.addEventListener('webkitmouseforcechanged', checkMacForce, false);
+}
+
+function handleUseTransformOnClick(checkBox) {
+  shouldUseTransform = checkBox.checked;
 }
