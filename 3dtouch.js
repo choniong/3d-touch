@@ -1,9 +1,22 @@
 var element = document.getElementById('forceMe');
 var forceValueOutput = document.getElementById('forceValue');
+var uniqueTouchOutput = document.getElementById('uniqueTouch');
+var totalTouchOutput = document.getElementById('totalTouch');
 var background = document.getElementById('background');
-var touch = null;
 
 addForceTouchToElement(element);
+
+var uniqueTouchRecorder = new Set();
+var totalTouchCount = 0;
+
+function recordTouch(touch) {
+  uniqueTouchRecorder.add(touch);
+  ++totalTouchCount;
+}
+
+function uniqueTouchCount() {
+  return uniqueTouchRecorder.size;
+}
 
 function onTouchStart(e) {
   e.preventDefault();
@@ -17,12 +30,15 @@ function onTouchMove(e) {
 
 function onTouchEnd(e) {
   e.preventDefault();
-  touch = null;
+  renderElement(0);
 }
 
 function checkForce(e) {
-  touch = e.touches[0];
-  setTimeout(refreshForceValue.bind(touch), 10);
+  var touch = e.touches[0];
+  refreshForceValue(e.touches[0]);
+  recordTouch(touch);
+  uniqueTouchOutput.innerHTML = uniqueTouchCount();
+  totalTouchOutput.innerHTML = totalTouchCount;
 }
 
 function checkMacForce(e) {
@@ -30,14 +46,10 @@ function checkMacForce(e) {
   renderElement(e.webkitForce/3);
 }
 
-function refreshForceValue() {
-  var touchEvent = this;
+function refreshForceValue(touch) {
   var forceValue = 0;
-  if(touchEvent) {
-    forceValue = touchEvent.force || 0;
-    setTimeout(refreshForceValue.bind(touch), 10);
-  }else{
-    forceValue = 0;
+  if(touch) {
+    forceValue = touch.force || 0;
   }
 
   renderElement(forceValue);
@@ -46,7 +58,7 @@ function refreshForceValue() {
 function renderElement(forceValue) {
   element.style.webkitTransform = 'translateX(-50%) translateY(-50%) scale(' + (1 + forceValue * 1.5) + ')';
   background.style.webkitFilter = 'blur(' + forceValue * 30 + 'px)';
-  forceValueOutput.innerHTML = 'Force: ' + forceValue.toFixed(4);
+  forceValueOutput.innerHTML = forceValue.toFixed(4);
 }
 
 function addForceTouchToElement(elem) {
