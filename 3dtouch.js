@@ -63,7 +63,7 @@ function refreshForceValue(touch) {
 function renderElement(forceValue) {
   if (shouldUseTransform) {
     element.style.transform = 'translateX(-50%) translateY(-50%) scale(' + (1 + forceValue * 1.5) + ')';
-    background.style.webkitFilter = 'blur(' + forceValue * 30 + 'px)';
+    // background.style.webkitFilter = 'blur(' + forceValue * 30 + 'px)';
   } else {
      forceMeBar.style.width = 200 * forceValue + "px";
   }
